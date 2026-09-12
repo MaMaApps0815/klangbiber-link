@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Klangbiber laden</title>
+<meta name="description" content="Klangbiber für iPhone, iPad und Android – Musiktheorie, Gehör und Grifftabellen für junge Bläserinnen und Bläser.">
+<meta name="robots" content="index, follow">
+
+<!-- Safari blendet damit oben ein natives Banner mit Direktlink zum App Store ein -->
+<meta name="apple-itunes-app" content="app-id=6764178009">
+
+<!-- Vorschau in WhatsApp, Messenger und sozialen Netzen.
+     ACHTUNG: og:url und og:image muessen VOLLE Adressen sein, relative Pfade
+     ignoriert WhatsApp. Die Seite liegt im Wurzelverzeichnis, erreichbar unter
+     klangbiber.de. Bei einem Umzug in einen Unterordner sind das hier die
+     beiden einzigen Zeilen, die angepasst werden muessen. -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://klangbiber.de/">
+<meta property="og:image" content="https://klangbiber.de/vorschau.png">
+<meta property="og:title" content="Klangbiber laden">
+<meta property="og:description" content="Musiktheorie, Gehörbildung und Grifftabellen für junge Bläserinnen und Bläser – für iPhone, iPad und Android.">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Der Klangbiber mit einer Notenschlüssel-Note, darunter der Schriftzug Klangbiber">
+<meta property="og:site_name" content="Klangbiber">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://klangbiber.de/vorschau.png">
+
+<style>
+  /* Schriften liegen bewusst auf dem EIGENEN Server statt bei Google Fonts:
+     eine Einbindung ueber fonts.googleapis.com uebertraegt die IP-Adresse jedes
+     Besuchers an Google. Das LG Muenchen I hat dafuer 2022 Schadenersatz
+     zugesprochen (Az. 3 O 17493/20). So bleibt kein Datenabfluss uebrig. */
+  @font-face {
+    font-family: "Fraunces";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("schriften/fraunces.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Outfit";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("schriften/outfit.woff2") format("woff2");
+  }
+
+  :root {
+    --grund: #EFE3CC;
+    --karte: #FFFAF0;
+    --tinte: #2C1810;
+    --gedaempft: #8B6F4F;
+    --rand: #D4C4A0;
+    --teal: #2C7A7B;
+    --gold: #D4A53C;
+    --schatten: 4px 4px 0 #2C1810;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--grund);
+    color: var(--tinte);
+    font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  main {
+    width: 100%;
+    max-width: 26rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  svg { display: block; }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(2.1rem, 9vw, 2.7rem);
+    margin: 0;
+    letter-spacing: -.01em;
+    line-height: 1.05;
+  }
+  .untertitel {
+    margin: .35rem 0 0;
+    font-size: 1rem;
+    color: var(--gedaempft);
+    line-height: 1.45;
+    max-width: 22rem;
+  }
+  .kopf { display: flex; flex-direction: column; align-items: center; }
+
+  .knoepfe { display: flex; flex-direction: column; gap: .85rem; width: 100%; }
+  a.laden {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding: .95rem 1.15rem;
+    background: var(--karte);
+    color: var(--tinte);
+    border: 3px solid var(--tinte);
+    border-radius: 14px;
+    box-shadow: var(--schatten);
+    text-decoration: none;
+    text-align: left;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  a.laden:hover, a.laden:focus-visible {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--tinte);
+  }
+  a.laden:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+  a.laden .zeichen {
+    flex: 0 0 auto;
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border: 2px solid var(--tinte);
+    border-radius: 10px;
+    background: var(--grund);
+  }
+  a.laden .text { display: flex; flex-direction: column; line-height: 1.25; }
+  a.laden .wo { font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: 1.08rem; }
+  a.laden .fuer { font-size: .82rem; color: var(--gedaempft); }
+  a.laden .pfeil { margin-left: auto; color: var(--gedaempft); font-size: 1.3rem; line-height: 1; }
+
+  .status {
+    font-size: .85rem;
+    color: var(--gedaempft);
+    min-height: 1.2em;
+    margin: 0;
+  }
+  .status b { color: var(--teal); font-weight: 600; }
+  footer {
+    font-size: .78rem;
+    color: var(--gedaempft);
+    line-height: 1.5;
+    border-top: 1px solid var(--rand);
+    padding-top: 1rem;
+    width: 100%;
+  }
+  footer a { color: var(--gedaempft); }
+  .rechtliches {
+    display: flex; justify-content: center; align-items: center; gap: .5rem;
+    margin-top: .6rem;
+  }
+  .rechtliches a { text-decoration: underline; text-underline-offset: 2px; }
+  .rechtliches span { color: var(--rand); }
+  @media (prefers-reduced-motion: reduce) {
+    a.laden { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <div class="kopf">
+    <svg viewBox="0 0 200 200" width="150" height="150" role="img" aria-label="Der Klangbiber">
+      <ellipse cx="100" cy="186" rx="62" ry="6" fill="#000" opacity="0.13" />
+      <g transform="translate(155 130) rotate(-15)">
+        <ellipse cx="0" cy="0" rx="32" ry="16" fill="#5a3825" stroke="#2C1810" stroke-width="3" />
+        <line x1="-15" y1="-8" x2="-15" y2="8" stroke="#2C1810" stroke-width="1.2" opacity="0.5" />
+        <line x1="-5" y1="-10" x2="-5" y2="10" stroke="#2C1810" stroke-width="1.2" opacity="0.5" />
+        <line x1="5" y1="-10" x2="5" y2="10" stroke="#2C1810" stroke-width="1.2" opacity="0.5" />
+        <line x1="15" y1="-8" x2="15" y2="8" stroke="#2C1810" stroke-width="1.2" opacity="0.5" />
+        <line x1="-25" y1="0" x2="25" y2="0" stroke="#2C1810" stroke-width="1.2" opacity="0.5" />
+      </g>
+      <ellipse cx="100" cy="138" rx="58" ry="50" fill="#8B5A3C" stroke="#2C1810" stroke-width="3.5" />
+      <ellipse cx="100" cy="151" rx="38" ry="32" fill="#D4A57A" />
+      <ellipse cx="50" cy="138" rx="13" ry="22" fill="#8B5A3C" stroke="#2C1810" stroke-width="3" transform="rotate(-25 50 138)" />
+      <ellipse cx="150" cy="138" rx="13" ry="22" fill="#8B5A3C" stroke="#2C1810" stroke-width="3" transform="rotate(25 150 138)" />
+      <circle cx="100" cy="80" r="44" fill="#8B5A3C" stroke="#2C1810" stroke-width="3.5" />
+      <circle cx="68" cy="50" r="11" fill="#8B5A3C" stroke="#2C1810" stroke-width="3" />
+      <circle cx="132" cy="50" r="11" fill="#8B5A3C" stroke="#2C1810" stroke-width="3" />
+      <circle cx="68" cy="50" r="5" fill="#5a3825" />
+      <circle cx="132" cy="50" r="5" fill="#5a3825" />
+      <circle cx="84" cy="73" r="6" fill="#2C1810" />
+      <circle cx="116" cy="73" r="6" fill="#2C1810" />
+      <circle cx="86" cy="71" r="2" fill="white" />
+      <circle cx="118" cy="71" r="2" fill="white" />
+      <circle cx="68" cy="93" r="6" fill="#E8806B" opacity="0.55" />
+      <circle cx="132" cy="93" r="6" fill="#E8806B" opacity="0.55" />
+      <ellipse cx="100" cy="93" rx="7" ry="5" fill="#2C1810" />
+      <ellipse cx="98" cy="91" rx="2" ry="1.5" fill="#FFF" opacity="0.4" />
+      <path d="M 86 104 Q 100 118 114 104" stroke="#2C1810" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      <rect x="93" y="108" width="6" height="12" fill="#FCECAF" stroke="#2C1810" stroke-width="1.5" rx="1.5" />
+      <rect x="101" y="108" width="6" height="12" fill="#FCECAF" stroke="#2C1810" stroke-width="1.5" rx="1.5" />
+      <g transform="translate(158 35) rotate(15)">
+        <line x1="0" y1="-15" x2="0" y2="8" stroke="#D4A53C" stroke-width="2.5" />
+        <ellipse cx="-3" cy="8" rx="6" ry="4" fill="#D4A53C" stroke="#2C1810" stroke-width="1.5" transform="rotate(-15 -3 8)" />
+        <path d="M 0 -15 Q 12 -12 9 -3" stroke="#D4A53C" stroke-width="2.5" fill="none" />
+      </g>
+    </svg>
+    <h1>Klangbiber</h1>
+    <p class="untertitel">Musiktheorie, Gehörbildung und Grifftabellen für junge Bläserinnen und Bläser.</p>
+  </div>
+
+  <p class="status" id="status"></p>
+
+  <div class="knoepfe">
+    <a class="laden" id="apple" href="https://apps.apple.com/de/app/klangbiber/id6764178009">
+      <span class="zeichen" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#2C1810">
+          <path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.9-3-.8-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.6 2.3 2.8 2.3 1.1 0 1.6-.7 3-.7 1.4 0 1.8.7 3 .7 1.3 0 2.1-1.1 2.8-2.2.9-1.3 1.3-2.5 1.3-2.6 0 0-2.4-.9-2.4-3.6zM14.2 5.9c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.7-.9 2.8 1 0 2-.5 2.7-1.3z"/>
+        </svg>
+      </span>
+      <span class="text">
+        <span class="wo">App Store</span>
+        <span class="fuer">für iPhone und iPad</span>
+      </span>
+      <span class="pfeil" aria-hidden="true">›</span>
+    </a>
+
+    <a class="laden" id="play" href="https://play.google.com/store/apps/details?id=de.klangbiber.app">
+      <span class="zeichen" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#2C1810">
+          <path d="M3.7 2.4c-.3.3-.4.7-.4 1.3v16.6c0 .6.1 1 .4 1.3l.1.1 9.3-9.3v-.2L3.8 2.3l-.1.1zM16.3 15.6l-3.1-3.1v-.2l3.1-3.1.1 0 3.7 2.1c1 .6 1 1.6 0 2.2l-3.7 2.1-.1 0zM15.5 16.5L12.3 13.3 3 22.6c.4.4 1 .4 1.6.1l10.9-6.2M15.5 7.5L4.6 1.3C4 1 3.4 1 3 1.4l9.3 9.3 3.2-3.2z"/>
+        </svg>
+      </span>
+      <span class="text">
+        <span class="wo">Google Play</span>
+        <span class="fuer">für Android</span>
+      </span>
+      <span class="pfeil" aria-hidden="true">›</span>
+    </a>
+  </div>
+
+  <footer>
+    Diese Seite erkennt dein Gerät und öffnet den passenden Store von selbst.
+    Falls das nicht klappt, wähle einfach oben.
+    <!-- Pflichtangaben nach § 5 DDG und Art. 13 DSGVO. Sobald Impressum und
+         Datenschutz auf klangbiber.de liegen, hier auf die eigenen Seiten zeigen. -->
+    <nav class="rechtliches">
+      <a href="https://sites.google.com/view/klangbiber-app">Impressum</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://sites.google.com/view/klangbiber-app">Datenschutz</a>
+    </nav>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  var APPLE = "https://apps.apple.com/de/app/klangbiber/id6764178009";
+  var PLAY  = "https://play.google.com/store/apps/details?id=de.klangbiber.app";
+
+  // Mit ?bleib am Ende der Adresse bleibt die Seite stehen - praktisch zum Ansehen und Testen.
+  if (location.search.indexOf("bleib") > -1) {
+    document.getElementById("status").innerHTML = "Automatische Weiterleitung ist für diesen Aufruf ausgeschaltet.";
+    return;
+  }
+
+  var ua = navigator.userAgent || "";
+  // iPadOS ab 13 meldet sich als Macintosh; Touchpunkte verraten das echte Gerät.
+  var istApple = /iPad|iPhone|iPod/.test(ua) ||
+                 (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var istAndroid = /Android/.test(ua) && !/Windows Phone/.test(ua);
+
+  var ziel = istApple ? APPLE : istAndroid ? PLAY : null;
+  if (!ziel) return;   // Rechner und alles Unbekannte sehen beide Schaltflächen.
+
+  document.getElementById("status").innerHTML =
+    "Einen Moment, wir öffnen den <b>" + (istApple ? "App Store" : "Google Play Store") + "</b> …";
+
+  // replace statt href: der Zurück-Knopf führt danach nicht in eine Schleife.
+  location.replace(ziel);
+})();
+</script>
+
+<noscript>
+  <p style="text-align:center;font-family:Outfit,sans-serif;color:#8B6F4F;font-size:.85rem">
+    Ohne JavaScript geht es nicht automatisch – bitte oben den passenden Store wählen.
+  </p>
+</noscript>
+</body>
+</html>
